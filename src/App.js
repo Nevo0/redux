@@ -1,74 +1,17 @@
 import React, { Component } from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import { createStore, combineReducers, bindActionCreators } from "redux";
+import { createStore } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
+import rootReducer from "./reducers";
+import { moviesActions } from "./App/movies/dack";
 
-//z urzyciem tej funkcji createStore utworzymy pierwszy prosty stor w ktorym bedziemy pezecoowycwac filmiki
-
-//  createStore  przyjmuje funkcje
-
-const initialMovies = {
-  listName: "Favourite",
-  list: ["RamboIII", "Hakerzy", "Matrix"]
-};
-const initialActors = {
-  listName: "Best",
-  list: ["Tom Hanks", "Julia Roberts", "Angelina Jolie"]
-};
-// funkcja ktora jest reducerem
-
-function movies(state = initialMovies, action) {
-  switch (action.type) {
-    case "ADD_MOVIE":
-      return { ...state, list: [...state.list, action.item] };
-    case "RESET_MOVIE":
-      return { ...state, list: [] };
-    default:
-      return state;
-  }
-}
-
-function actors(state = initialActors, action) {
-  switch (action.type) {
-    case "ADD_ACTORS":
-      return { ...state, list: [...state.list, action.item] };
-    case "RESET_ACTORS":
-      return { ...state, list: [] };
-    default:
-      return state;
-  }
-}
-
-// tworzymy zmienna o nazwie store i utworzymy stora z urzycie m fiunkcji creat stor
-//przekazujemy naszsego reducera 'movies'
-
-const allReducers = combineReducers({ movies, actors });
-const store = createStore(allReducers, composeWithDevTools());
-
-const addActor = item => ({ type: "ADD_ACTORS", item });
-const resetActors = () => ({ type: "RESET_ACTORS" });
-const addFilm = item => ({ type: "ADD_MOVIE", item });
-const resetFilm = () => ({ type: "RESET_MOVIE" });
-
-const actorsActions = bindActionCreators(
-  { add: addActor, reset: resetActors },
-  store.dispatch
-);
-
-const filmsActions = bindActionCreators(
-  { add: addFilm, reset: resetFilm },
-  store.dispatch
-);
-store.dispatch(addActor("Cezary Pazura"));
-
-actorsActions.add("Jan Frycz");
-filmsActions.add("Norma");
-actorsActions.reset();
-filmsActions.reset();
+const store = createStore(rootReducer, composeWithDevTools());
 
 // przypiujemy nasz stor  do window aby miec szybki dostep do niego
 window.store = store;
+
+store.dispatch(moviesActions.add("Rambo V"));
 
 class App extends Component {
   render() {
@@ -76,7 +19,6 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          <Coś />
           <img src={logo} className="App-logo" alt="logo" />
           <p>
             Edit <code>src/App.js</code> and save to reload.
