@@ -8,7 +8,6 @@ import { moviesActions } from "./App/movies/dack";
 
 const store = createStore(rootReducer, composeWithDevTools());
 
-// przypiujemy nasz stor  do window aby miec szybki dostep do niego
 window.store = store;
 
 store.dispatch(moviesActions.add("Rambo V"));
